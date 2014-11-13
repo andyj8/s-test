@@ -15,6 +15,7 @@
 
         <service id="sainsburys.scrape.service"
                  class="Sainsburys\Scraper\ScrapeService">
+            <argument type="string">%bbc_url%</argument>
             <argument type="service" id="sainsburys.scrape.scraper" />
             <argument type="service" id="sainsburys.scrape.parser" />
             <argument type="service" id="sainsburys.scrape.word_counter" />

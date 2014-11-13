@@ -9,6 +9,11 @@ use Sainsburys\Scraper\Scraper\Scraper;
 class ScrapeService
 {
     /**
+     * @var string
+     */
+    private $url;
+
+    /**
      * @var Scraper
      */
     private $scraper;
@@ -24,12 +29,14 @@ class ScrapeService
     private $wordCounter;
 
     /**
+     * @param string $url
      * @param Scraper $scraper
      * @param Parser $parser
      * @param WordCounter $wordCounter
      */
-    public function __construct(Scraper $scraper, Parser $parser, WordCounter $wordCounter)
+    public function __construct($url, Scraper $scraper, Parser $parser, WordCounter $wordCounter)
     {
+        $this->url = $url;
         $this->parser = $parser;
         $this->scraper = $scraper;
         $this->wordCounter = $wordCounter;
@@ -40,7 +47,7 @@ class ScrapeService
      */
     public function scrapeNews()
     {
-        $html = $this->scraper->getPageContent('http://www.bbc.co.uk/news/');
+        $html = $this->scraper->getPageContent($this->url);
 
         $articles = $this->parser->getArticles($html);
 
