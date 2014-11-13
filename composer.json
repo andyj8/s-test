@@ -7,7 +7,6 @@
         "sensio/framework-extra-bundle": "3.0.*@dev",
         "monolog/monolog": "1.10.0",
         "symfony/monolog-bundle": "~2.4",
-        "kriswallsmith/buzz": "0.12",
         "sensio/generator-bundle": "~2.3",
         "sensio/distribution-bundle": "~3.0"
 
