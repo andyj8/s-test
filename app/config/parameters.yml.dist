@@ -22,3 +22,7 @@ parameters:
     debug_toolbar:          true
     debug_redirects:        false
     use_assetic_controller: true
+
+    bbc_articles_selector: "#most-popular .open li a"
+    bbc_body_selector: .story-body p
+    exclude_words: the,a,is,and,I,of,in,to,on,that,said,we,it,for,not,its
