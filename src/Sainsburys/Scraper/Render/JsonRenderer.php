@@ -21,6 +21,6 @@ class JsonRenderer implements Renderer
             );
         }, $articles);
 
-        return json_encode($output, JSON_PRETTY_PRINT);
+        return json_encode(array('results' => $output), JSON_PRETTY_PRINT);
     }
 }
