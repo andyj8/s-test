@@ -24,6 +24,7 @@
 
         <service id="sainsburys.scrape.scraper"
                  class="Sainsburys\Scraper\Scraper\HttpScraper">
+            <argument type="service" id="logger" />
         </service>
 
         <service id="sainsburys.scrape.parser.config"
