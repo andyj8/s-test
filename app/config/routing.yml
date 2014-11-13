@@ -1,0 +1,4 @@
+sainsburys_news:
+    resource: "@SainsburysNewsBundle/Controller/"
+    type:     annotation
+    prefix:   /

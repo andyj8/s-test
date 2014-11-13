@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <!--<service id="sainsburys.scrape.command"-->
+        <!--class="Sainsburys\ScraperBundle\Command\ScrapeNewsCommand">-->
+        <!--<argument type="service" id="sainsburys.scrape.service" />-->
+        <!--<tag name="console.command" />-->
+        <!--</service>-->
+
+        <service id="sainsburys.scrape.service"
+                 class="Sainsburys\Scraper\ScrapeService">
+            <argument type="service" id="sainsburys.scrape.scraper" />
+            <argument type="service" id="sainsburys.scrape.parser" />
+            <argument type="service" id="sainsburys.scrape.word_counter" />
+        </service>
+
+
+        <service id="sainsburys.scrape.scraper"
+                 class="Sainsburys\Scraper\Scraper\FileScraper">
+        </service>
+
+        <service id="sainsburys.scrape.parser"
+                 class="Sainsburys\Scraper\Parse\Parser">
+        </service>
+
+        <service id="sainsburys.scrape.word_counter"
+                 class="Sainsburys\Scraper\Parse\WordCounter">
+            <argument type="string">%exclude_words%</argument>
+        </service>
+
+    </services>
+
+</container>
+
