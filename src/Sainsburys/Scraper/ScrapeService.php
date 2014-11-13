@@ -50,20 +50,25 @@ class ScrapeService
         $html = $this->scraper->getPageContent($this->url);
 
         $articles = $this->parser->getArticles($html);
-
         foreach ($articles as $article) {
-
-            $size = $this->scraper->getPageSize($article->getHref());
-            $article->setSize($size);
-
-            $html = $this->scraper->getPageContent($article->getHref());
-            $body = $this->parser->getBody($html);
-
-            $word = $this->wordCounter->getMostUsed($body);
-            $article->setMostUsedWord($word);
+            $this->setArticleDetails($article);
         }
 
         return $articles;
+    }
+
+    /**
+     * @param Article $article
+     */
+    private function setArticleDetails(Article $article)
+    {
+        $size = $this->scraper->getPageSize($article->getHref());
+        $article->setSize($size);
+
+        $html = $this->scraper->getPageContent($article->getHref());
+        $body = $this->parser->getBody($html);
+        $word = $this->wordCounter->getMostUsed($body);
+        $article->setMostUsedWord($word);
     }
 
 }
