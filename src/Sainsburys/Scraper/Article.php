@@ -75,6 +75,14 @@ class Article
     }
 
     /**
+     * @return string
+     */
+    public function getSizeAsKb()
+    {
+        return round(($this->size / 1024), 1) . 'kb';
+    }
+
+    /**
      * @param int $size
      */
     public function setSize($size)

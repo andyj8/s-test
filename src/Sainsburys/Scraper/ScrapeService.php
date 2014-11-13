@@ -40,12 +40,12 @@ class ScrapeService
      */
     public function scrapeNews()
     {
-        $url = '/var/www/html/sainsburys/test/assets/test.html';
-        $html = $this->scraper->getPageContent($url);
+        $html = $this->scraper->getPageContent('http://www.bbc.co.uk/news/');
 
         $articles = $this->parser->getArticles($html);
 
         foreach ($articles as $article) {
+
             $size = $this->scraper->getPageSize($article->getHref());
             $article->setSize($size);
 
@@ -54,12 +54,9 @@ class ScrapeService
 
             $word = $this->wordCounter->getMostUsed($body);
             $article->setMostUsedWord($word);
-
         }
 
-        print_r($articles);
-
-
+        return $articles;
     }
 
 }

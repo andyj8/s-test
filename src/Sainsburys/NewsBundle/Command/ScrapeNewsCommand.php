@@ -2,19 +2,37 @@
 
 namespace Sainsburys\NewsBundle\Command;
 
+use Sainsburys\Scraper\Render\Renderer;
 use Sainsburys\Scraper\ScrapeService;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ScrapeNewsCommand extends ContainerAwareCommand
+class ScrapeNewsCommand extends Command
 {
     const NAME = 'sainsburys:scrape';
 
-    protected function configure()
+    /**
+     * @var ScrapeService
+     */
+    private $scraperService;
+
+    /**
+     * @var Renderer
+     */
+    private $renderer;
+
+    /**
+     * @param ScrapeService $service
+     * @param Renderer $renderer
+     */
+    public function __construct(ScrapeService $service, Renderer $renderer)
     {
-        $this->setName(self::NAME);
+        $this->scraperService = $service;
+        $this->renderer = $renderer;
+
+        parent::__construct(self::NAME);
     }
 
     /**
@@ -24,12 +42,10 @@ class ScrapeNewsCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $service = $this->getContainer()->get('sainsburys.scrape.service');
+        $articles = $this->scraperService->scrapeNews();
+        $json = $this->renderer->render($articles);
 
-        $articles = $service->scrapeNews();
-
-
-
+        echo $json;
     }
 
 }

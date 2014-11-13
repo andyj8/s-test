@@ -12,7 +12,7 @@ class WordCounter
     /**
      * @param string $excludeWords
      */
-    public function __construct($excludeWords)
+    public function __construct($excludeWords = '')
     {
         $this->excludeWords = explode(',', $excludeWords);
     }
@@ -25,17 +25,13 @@ class WordCounter
     {
         $words = array();
         foreach (explode(' ', $content) as $split) {
-            $words[] = trim(strtolower($split), '.",\'');
-        }
-
-        $clean = array();
-        foreach ($words as $word) {
-            if (!in_array($word, $this->excludeWords)) {
-                $clean[] = $word;
+            $word = trim(strtolower($split), '.-",\'');
+            if (!empty($word) && !in_array($word, $this->excludeWords)) {
+                $words[] = $word;
             }
         }
 
-        $counts = array_count_values($clean);
+        $counts = array_count_values($words);
         arsort($counts);
 
         return key($counts);

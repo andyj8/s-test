@@ -6,11 +6,12 @@
 
     <services>
 
-        <!--<service id="sainsburys.scrape.command"-->
-        <!--class="Sainsburys\ScraperBundle\Command\ScrapeNewsCommand">-->
-        <!--<argument type="service" id="sainsburys.scrape.service" />-->
-        <!--<tag name="console.command" />-->
-        <!--</service>-->
+        <service id="sainsburys.scrape.command"
+        class="Sainsburys\NewsBundle\Command\ScrapeNewsCommand">
+            <argument type="service" id="sainsburys.scrape.service" />
+            <argument type="service" id="sainsburys.scrape.renderer" />
+            <tag name="console.command" />
+        </service>
 
         <service id="sainsburys.scrape.service"
                  class="Sainsburys\Scraper\ScrapeService">
@@ -21,16 +22,31 @@
 
 
         <service id="sainsburys.scrape.scraper"
-                 class="Sainsburys\Scraper\Scraper\FileScraper">
+                 class="Sainsburys\Scraper\Scraper\HttpScraper">
+        </service>
+
+        <service id="sainsburys.scrape.parser.config"
+                 class="Sainsburys\Scraper\Parse\ParserConfig">
+            <call method="setArticlesSelector">
+                <argument type="string">%bbc_articles_selector%</argument>
+            </call>
+            <call method="setBodySelector">
+                <argument type="string">%bbc_body_selector%</argument>
+            </call>
         </service>
 
         <service id="sainsburys.scrape.parser"
                  class="Sainsburys\Scraper\Parse\Parser">
+            <argument type="service" id="sainsburys.scrape.parser.config" />
         </service>
 
         <service id="sainsburys.scrape.word_counter"
                  class="Sainsburys\Scraper\Parse\WordCounter">
             <argument type="string">%exclude_words%</argument>
+        </service>
+
+        <service id="sainsburys.scrape.renderer"
+            class="Sainsburys\Scraper\Render\JsonRenderer">
         </service>
 
     </services>

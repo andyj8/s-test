@@ -8,19 +8,30 @@ use Symfony\Component\DomCrawler\Crawler;
 class Parser
 {
     /**
+     * @var ParserConfig
+     */
+    private $config;
+
+    /**
+     * @param ParserConfig $config
+     */
+    public function __construct(ParserConfig $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
      * @param string $html
      * @return Article[]
      */
     public function getArticles($html)
     {
-        $crawler = new Crawler();
-        $crawler->addContent($html);
-        $nodes = $crawler->filter('#most-popular .open li a');
+        $crawler = $this->getCrawler($html);
 
         $articles = array();
-        foreach ($nodes as $node) {
-            $title = trim($node->nodeValue);
-            $articles[] = new Article($title, $node->getAttribute('href'));
+        $selector = $this->config->getArticlesSelector();
+        foreach ($crawler->filter($selector) as $node) {
+            $articles[] = new Article($this->getTitle($node), $node->getAttribute('href'));
         }
 
         return $articles;
@@ -32,16 +43,41 @@ class Parser
      */
     public function getBody($html)
     {
-        $crawler = new Crawler();
-        $crawler->addContent($html);
+        $crawler = $this->getCrawler($html);
 
         $paragraphs = array();
-        $nodes = $crawler->filter('.story-body p');
-        foreach ($nodes as $node) {
-            $paragraphs[] = $node->nodeValue;
+        $selector = $this->config->getBodySelector();
+        foreach ($crawler->filter($selector) as $node) {
+            $paragraphs[] = trim($node->nodeValue);
         }
 
         return implode(' ', $paragraphs);
+    }
+
+    /**
+     * @param \DOMElement $node
+     * @return string
+     */
+    private function getTitle(\DOMElement $node)
+    {
+        $spans = $node->getElementsByTagName('span');
+        if ($spans->length) {
+            $node->removeChild($spans->item(0));
+        }
+
+        return trim($node->textContent);
+    }
+
+    /**
+     * @param string $html
+     * @return Crawler
+     */
+    private function getCrawler($html)
+    {
+        $crawler = new Crawler();
+        $crawler->addContent($html);
+
+        return $crawler;
     }
 
 }
